@@ -912,6 +912,7 @@ Image/Build/Profile/WT3020=$(call BuildFirmware/PorayDualSize/$(1),$(1),wt3020,W
 Image/Build/Profile/XIAOMI-MIWIFI-MINI=$(call BuildFirmware/Default16M/$(1),$(1),xiaomi-miwifi-mini,XIAOMI-MIWIFI-MINI)
 Image/Build/Profile/ZTE-Q7=$(call BuildFirmware/Default8M/$(1),$(1),zte-q7,ZTE-Q7)
 Image/Build/Profile/ZBT-WA05=$(call BuildFirmware/Default8M/$(1),$(1),zbt-wa05,ZBT-WA05)
+Image/Build/Profile/WNDR3700V5=$(call BuildFirmware/Default8M/$(1),$(1),wndr3700v5,WNDR3700V5)
 Image/Build/Profile/ArcherC20i=$(call BuildFirmware/Tplink/$(1),$(1),ArcherC20i,ArcherC20i)
 microwrt_mtd_size=16515072
 Image/Build/Profile/MicroWRT=$(call BuildFirmware/CustomFlash/$(1),$(1),microwrt,MicroWRT,$(microwrt_mtd_size))
@@ -945,6 +946,7 @@ define Image/Build/Profile/Default
 	$(call Image/Build/Profile/WT3020,$(1))
 	$(call Image/Build/Profile/XIAOMI-MIWIFI-MINI,$(1))
 	$(call Image/Build/Profile/ZTE-Q7,$(1))
+	$(call Image/Build/Profile/WNDR3700v5,$(1))
 	$(call Image/Build/Profile/ZBT-WA05,$(1))
 	$(call Image/Build/Profile/ArcherC20i,$(1))
 	$(call Image/Build/Profile/MicroWRT,$(1))
@@ -956,7 +958,7 @@ endif
 #
 
 ifeq ($(SUBTARGET),mt7621)
-  TARGET_DEVICES += mt7621 wsr-600 wsr-1166 dir-860l-b1 firewrt pbr-m1 re6500 zbt-wg2626
+  TARGET_DEVICES += mt7621 wsr-600 wsr-1166 dir-860l-b1 firewrt pbr-m1 re6500 zbt-wg2626 wndr3700v5
 endif
 
 define Device/mt7621
@@ -999,6 +1001,11 @@ endef
 
 define Device/pbr-m1
   DTS := PBR-M1
+  IMAGE_SIZE := $(ralink_default_fw_size_16M)
+endef
+
+define Device/wndr3700v5
+  DTS := WNDR3700V5
   IMAGE_SIZE := $(ralink_default_fw_size_16M)
 endef
 
