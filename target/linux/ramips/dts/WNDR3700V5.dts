@@ -6,13 +6,8 @@
 	compatible = "mediatek,mt7621-eval-board", "mediatek,mt7621-soc";
 	model = "WNR3700v5";
 
-	memory@0 {
-		device_type = "memory";
-		reg = <0x0 0x1c000000>, <0x20000000 0x4000000>;
-	};
-
 	chosen {
-		bootargs = "console=ttyS1,57600n8 boot=/dev/mtdblock3 keep_bootcon=1";
+		bootargs = "console=ttyS1,57600n8 root=/dev/mtdblock3 keep_bootcon=1";
 	};
 
 	sdhci@10130000 {
@@ -26,32 +21,108 @@
 			m25p80@0 {
 				#address-cells = <1>;
 				#size-cells = <1>;
-				compatible = "w25q128";
+				compatible = "mx25l12805d";
 				reg = <0 0>;
 				linux,modalias = "m25p80";
 				spi-max-frequency = <10000000>;
 
 				partition@0 {
-					label = "u-boot";
-					reg = <0x0 0x30000>;
+					label = "Bootloader";
+					reg = <0x0 0x40000>;
 					read-only;
 				};
 
-				partition@30000 {
-					label = "u-boot-env";
-					reg = <0x30000 0x10000>;
-					read-only;
-				};
-
-				factory: partition@40000 {
-					label = "factory";
-					reg = <0x40000 0x10000>;
+				partition@40000 {
+					label = "SC PID";
+					reg = <0x40000 0x50000>;
 					read-only;
 				};
 
 				partition@50000 {
-					label = "firmware";
-					reg = <0x50000 0xfb0000>;
+					label = "Kernel";
+					reg = <0x50000 0x2d0000>;
+					read-only;
+				};
+
+				partition@2d0000 {
+					label = "Rootfs";
+					reg = <0x2d0000 0xe70000>;
+				};
+
+				partition@e70000 {
+					label = "ML1";
+					reg = <0xe70000 0xe90000>;
+				};
+
+				partition@e90000 {
+					label = "ML2";
+					reg = <0xe90000 0xb0000>;
+				};
+
+				partition@eb0000 {
+					label = "ML3";
+					reg = <0xeb0000 0xed0000>;
+				};
+
+				partition@ed0000 {
+					label = "ML4";
+					reg = <0xed0000 0xf10000>;
+				};
+
+				partition@f10000 {
+					label = "ML5";
+					reg = <0xf10000 0xf30000>;
+				};
+
+				factory: partition@f30000 {
+					label = "Factory";
+					reg = <0xf30000 0xf40000>;
+					read-only;
+				};
+
+				partition@f40000 {
+					label = "SC Private Data";
+					reg = <0xf40000 0xf50000>;
+				};
+
+				partition@f50000 {
+					label = "POT";
+					reg = <0xf50000 0xf60000>;
+				};
+
+				partition@f60000 {
+					label = "Traffic Meter";
+					reg = <0xf60000 0xf80000>;
+				};
+
+				partition@f80000 {
+					label = "DPF";
+					reg = <0xf80000 0xf90000>;
+				};
+
+				partition@f90000 {
+					label = "SC Nvram";
+					reg = <0xf90000 0xfa0000>;
+				};
+
+				partition@fa0000 {
+					label = "Ralink Nvram";
+					reg = <0xfa0000 0xfb0000>;
+				};
+
+				partition@fb0000 {
+					label = "Ralink Reserved";
+					reg = <0xfb0000 0xfd0000>;
+				};
+
+				partition@fd0000 {
+					label = "ML6";
+					reg = <0xfd0000 0xff0000>;
+				};
+
+				partition@ff0000 {
+					label = "Upgrade Flag";
+					reg = <0xff0000 0x1000000>;
 				};
 
 			};
@@ -65,28 +136,6 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&i2c_pins>;
 			status = "okay";
-		};
-	};
-
-	pcie@1e140000 {
-		status = "okay";
-
-		pcie0 {
-			mt76@0,0 {
-				reg = <0x0000 0 0 0 0>;
-				device_type = "pci";
-				mediatek,mtd-eeprom = <&factory 0x8000>;
-				mediatek,2ghz = <0>;
-			};
-		};
-
-		pcie1 {
-			mt76@1,0 {
-				reg = <0x0000 0 0 0 0>;
-				device_type = "pci";
-				mediatek,mtd-eeprom = <&factory 0x0000>;
-				mediatek,5ghz = <0>;
-			};
 		};
 	};
 
